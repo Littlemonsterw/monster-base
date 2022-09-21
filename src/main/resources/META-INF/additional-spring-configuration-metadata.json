@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.mybatis-plus",
+      "type": "java.lang.String",
+      "description": "Description for spring.mybatis-plus."
+  }
+] }
