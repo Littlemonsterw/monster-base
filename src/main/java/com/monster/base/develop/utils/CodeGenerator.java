@@ -1,11 +1,16 @@
 package com.monster.base.develop.utils;
 
 import cn.hutool.core.date.DatePattern;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
-import com.baomidou.mybatisplus.generator.config.po.LikeTable;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
+import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.baomidou.mybatisplus.generator.fill.Column;
+import com.monster.base.develop.entity.BaseEntity;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
 
@@ -14,12 +19,13 @@ import java.util.Collections;
  * @date 2022/9/19 16:47
  */
 @Data
+@Slf4j
 public class CodeGenerator {
 
-    private String url;
-    private String username;
-    private String password;
-    private String schemaName;
+    private String url = "jdbc:mysql://10.10.1.42:3306/sc_cabinet?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai";
+    private String username = "sc";
+    private String password = "Leyun@sc";
+    private String schemaName = "t_consign_order";
 
     private String packageDir;
     private String packageWebDir;
@@ -35,8 +41,8 @@ public class CodeGenerator {
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig.Builder()
                 .disableOpenDir()
-                .outputDir("")
-                .author("")
+                .outputDir("G://code")
+                .author("monster-w")
                 .enableSwagger()
                 .dateType(DateType.TIME_PACK)
                 .commentDate(DatePattern.NORM_DATETIME_PATTERN)
@@ -44,7 +50,7 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig packageConfig = new PackageConfig.Builder()
-                .parent("")
+                .parent("com.monster")
                 .moduleName("")
                 .entity("entity")
                 .service("service")
@@ -54,7 +60,57 @@ public class CodeGenerator {
                 .controller("controller")
                 .build();
 
-        // 模板配置
+        // 注入配置
+        InjectionConfig injectionConfig = new InjectionConfig.Builder()
+                .beforeOutputFile((tableInfo, objectMap) -> log.info("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size()))
+                .customMap(Collections.singletonMap("test", "monster"))
+                .customFile(Collections.singletonMap("test.txt", "/templates/test.vm"))
+                .build();
+
+        // 策略配置
+        StrategyConfig strategyConfig = new StrategyConfig.Builder()
+                .enableSchema()
+                .enableCapitalMode()
+                .enableSkipView()
+                .disableSqlFilter()
+                .addExclude(schemaName)
+                .addTablePrefix("t_", "c_")
+                .addFieldSuffix("_flag")
+                .build();
+
+        // 实体属性配置
+        strategyConfig.entityBuilder()
+                .naming(NamingStrategy.underline_to_camel)
+                .idType(IdType.ASSIGN_ID)
+                .superClass(BaseEntity.class)
+                .enableLombok()
+                .enableTableFieldAnnotation()
+                .enableFileOverride()
+                .formatFileName("%sEntity")
+                .addTableFills(new Column("create_time", FieldFill.INSERT))
+                .addTableFills(new Column("update_time", FieldFill.INSERT_UPDATE))
+                .build();
+        // 控制器属性配置
+        strategyConfig.controllerBuilder()
+                .enableFileOverride()
+                .enableHyphenStyle()
+                .enableRestStyle()
+                .formatFileName("%sController")
+                .build();
+        // Service属性配置
+        strategyConfig.serviceBuilder()
+                .enableFileOverride()
+                .formatServiceFileName("I%sService")
+                .formatServiceImplFileName("%sServiceImpl")
+                .build();
+        // Mapper属性配置
+        strategyConfig.mapperBuilder()
+                .enableBaseResultMap()
+                .enableFileOverride()
+                .formatMapperFileName("%sMapper")
+                .formatXmlFileName("%sMapper")
+                .build();
+
         TemplateConfig templateConfig = new TemplateConfig.Builder()
                 .disable(TemplateType.ENTITY)
                 .entity("/templates/entity.java")
@@ -65,32 +121,12 @@ public class CodeGenerator {
                 .controller("/templates/controller.java")
                 .build();
 
-        // 注入配置
-        InjectionConfig injectionConfig = new InjectionConfig.Builder()
-                .beforeOutputFile((tableInfo, objectMap) -> {
-                    System.out.println("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size());
-                })
-                .customMap(Collections.singletonMap("test", "monster"))
-                .customFile(Collections.singletonMap("test.txt", "/templates/test.vm"))
-                .build();
-
-        // 策略配置
-        StrategyConfig strategyConfig = new StrategyConfig.Builder()
-                .enableCapitalMode()
-                .enableSkipView()
-                .disableSqlFilter()
-                .likeTable(new LikeTable("USER"))
-                .addInclude("t_simple")
-                .addTablePrefix("t_", "c_")
-                .addFieldSuffix("_flag")
-                .build();
-
         AutoGenerator generator = new AutoGenerator(dsc);
         generator.global(globalConfig);
         generator.packageInfo(packageConfig);
-        generator.template(templateConfig);
-        generator.injection(injectionConfig);
+//        generator.injection(injectionConfig);
         generator.strategy(strategyConfig);
+        generator.template(templateConfig);
         generator.execute();
     }
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.monster.base.develop.entity.Code;
 import com.monster.base.develop.mapper.CodeMapper;
 import com.monster.base.develop.service.ICodeService;
+import com.monster.base.develop.utils.CodeGenerator;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,4 +13,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements ICodeService {
+
+    @Override
+    public void codeGenerator() {
+        CodeGenerator codeGenerator = new CodeGenerator();
+        codeGenerator.run();
+    }
 }
