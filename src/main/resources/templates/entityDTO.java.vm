@@ -1,0 +1,21 @@
+#set($dtoPackage=$package.Entity.replace("entity","dto"))
+package $!{dtoPackage};
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import $!{package.Entity}.$!{entity};
+
+/**
+ * $!{table.comment} 数据传输对象实体类
+ *
+ * @author $!{author}
+ * @date $!{date}
+ */
+#if($!{entityLombokModel})
+@Data
+@EqualsAndHashCode(callSuper = true)
+#end
+public class $!{entity}DTO extends $!{entity} {
+    private static final long serialVersionUID = 1L;
+
+}
