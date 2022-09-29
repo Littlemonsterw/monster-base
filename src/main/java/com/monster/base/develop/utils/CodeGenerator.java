@@ -11,8 +11,14 @@ import com.baomidou.mybatisplus.generator.fill.Column;
 import com.monster.base.develop.entity.BaseEntity;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
+import java.io.IOException;
 import java.util.Collections;
+import java.util.Properties;
 
 /**
  * @author wuhan
@@ -21,28 +27,37 @@ import java.util.Collections;
 @Data
 @Slf4j
 public class CodeGenerator {
-
-    private String url = "jdbc:mysql://10.10.1.42:3306/sc_cabinet?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai";
-    private String username = "sc";
-    private String password = "Leyun@sc";
-    private String schemaName = "t_consign_order";
-
+    private String url;
+    private String username;
+    private String password;
+    private String schemaName;
+    private String parentPackage;
+    private String moduleName;
+    private String tablePrefix;
+    private String[] superEntityColumns;
     private String packageDir;
     private String packageWebDir;
 
     public void run() {
+        Properties prop = this.getProperties();
+        String outputDir = this.getOutputDir();
+        String author = prop.getProperty("author");
+        String defaultUrl = prop.getProperty("spring.datasource.url");
+        String defaultUserName = prop.getProperty("spring.datasource.username");
+        String defaultPassword = prop.getProperty("spring.datasource.password");
 
         // 数据库配置
         DataSourceConfig dsc = new DataSourceConfig
-                .Builder(url, username, password)
-                .schema(schemaName)
+                .Builder(StringUtils.isBlank(url) ? defaultUrl : url,
+                StringUtils.isBlank(username) ? defaultUserName : username,
+                StringUtils.isBlank(password) ? defaultPassword : password)
                 .build();
 
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig.Builder()
                 .disableOpenDir()
-                .outputDir("G://code")
-                .author("monster-w")
+                .outputDir(outputDir)
+                .author(author)
                 .enableSwagger()
                 .dateType(DateType.TIME_PACK)
                 .commentDate(DatePattern.NORM_DATETIME_PATTERN)
@@ -50,8 +65,8 @@ public class CodeGenerator {
 
         // 包配置
         PackageConfig packageConfig = new PackageConfig.Builder()
-                .parent("com.monster")
-                .moduleName("")
+                .parent(parentPackage)
+                .moduleName(moduleName)
                 .entity("entity")
                 .service("service")
                 .serviceImpl("service.impl")
@@ -74,8 +89,7 @@ public class CodeGenerator {
                 .enableSkipView()
                 .disableSqlFilter()
                 .addExclude(schemaName)
-                .addTablePrefix("t_", "c_")
-                .addFieldSuffix("_flag")
+                .addTablePrefix(tablePrefix)
                 .build();
 
         // 实体属性配置
@@ -124,9 +138,30 @@ public class CodeGenerator {
         AutoGenerator generator = new AutoGenerator(dsc);
         generator.global(globalConfig);
         generator.packageInfo(packageConfig);
-//        generator.injection(injectionConfig);
+        generator.injection(injectionConfig);
         generator.strategy(strategyConfig);
         generator.template(templateConfig);
         generator.execute();
+    }
+
+    private Properties getProperties() {
+        Resource resource = new ClassPathResource("/templates/code.properties");
+        Properties properties = new Properties();
+        try {
+            properties = PropertiesLoaderUtils.loadProperties(resource);
+        } catch (IOException ioException) {
+            log.error("获取资源文件出错", ioException);
+        }
+        return properties;
+    }
+
+    private String getOutputDir() {
+        String defaultPackageDir = System.getProperty("user.dir") + "/monster-develop";
+        return (StringUtils.isBlank(this.packageDir) ? defaultPackageDir : this.packageDir) + "/src/main/java";
+    }
+
+    private String getOutputWebDir() {
+        String defaultPackageWebDir = System.getProperty("user.dir");
+        return (StringUtils.isBlank(this.packageDir) ? defaultPackageWebDir : this.packageDir) + "/src/web";
     }
 }
