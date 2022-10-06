@@ -88,7 +88,7 @@ public class CodeGenerator {
                 .enableCapitalMode()
                 .enableSkipView()
                 .disableSqlFilter()
-                .addExclude(schemaName)
+                .addInclude(schemaName)
                 .addTablePrefix(tablePrefix)
                 .build();
 
@@ -126,7 +126,6 @@ public class CodeGenerator {
                 .build();
 
         TemplateConfig templateConfig = new TemplateConfig.Builder()
-                .disable(TemplateType.ENTITY)
                 .entity("/templates/entity.java")
                 .service("/templates/service.java")
                 .serviceImpl("/templates/serviceImpl.java")
@@ -138,7 +137,7 @@ public class CodeGenerator {
         AutoGenerator generator = new AutoGenerator(dsc);
         generator.global(globalConfig);
         generator.packageInfo(packageConfig);
-        generator.injection(injectionConfig);
+        //generator.injection(injectionConfig);
         generator.strategy(strategyConfig);
         generator.template(templateConfig);
         generator.execute();
@@ -156,8 +155,8 @@ public class CodeGenerator {
     }
 
     private String getOutputDir() {
-        String defaultPackageDir = System.getProperty("user.dir") + "/monster-develop";
-        return (StringUtils.isBlank(this.packageDir) ? defaultPackageDir : this.packageDir) + "/src/main/java";
+        String defaultPackageDir = System.getProperty("user.dir");
+        return (StringUtils.isBlank(this.packageDir) ? defaultPackageDir : this.packageDir) + "\\src\\main\\java";
     }
 
     private String getOutputWebDir() {

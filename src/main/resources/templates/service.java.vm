@@ -14,13 +14,13 @@ import $!{voPackage}.$!{entity}VO;
  */
 public interface $!{table.serviceName} extends $!{superServiceClass}<$!{entity}> {
 
-        /**
-         * 分页查询
-         *
-         * @param page 分页
-         * @param $!{table.entityPath} 查询条件
-         * @return IPage<$!{entity}VO>
-         */
-        IPage<$!{entity}VO> get$!{entity}Page(IPage<$!{entity}VO> page, $!{entity}VO $!{table.entityPath});
+    /**
+     * 分页查询
+     *
+     * @param page 分页
+     * @param $!{table.entityPath} 查询条件
+     * @return IPage<$!{entity}VO>
+     */
+    IPage<$!{entity}VO> get$!{entity}Page(IPage<$!{entity}VO> page, $!{entity}VO $!{table.entityPath});
 
 }

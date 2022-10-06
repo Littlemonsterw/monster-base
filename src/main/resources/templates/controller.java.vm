@@ -28,25 +28,24 @@ public class $!{table.controllerName} extends $!{superControllerClass} {
 public class $!{table.controllerName} {
 #end
 
-private $!{table.serviceName} $!{table.entityPath}Service;
+    private $!{table.serviceName} $!{table.entityPath}Service;
 
-@GetMapping("/detail")
-@ApiOperation(value = "详情")
-public $!{entity} detail((@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
-    $!{entity} detail = $!{table.entityPath}Service.getById(id);
+    @GetMapping("/detail")
+    @ApiOperation(value = "详情")
+    public $!{entity} detail((@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+        $!{entity} detail = $!{table.entityPath}Service.getById(id);
         return detail;
-        }
+    }
 
-@PostMapping("/submit")
-@ApiOperation(value = "新增或修改")
-public Boolean submit(@Valid @RequestBody $!{entity} $!{table.entityPath}) {
+    @PostMapping("/submit")
+    @ApiOperation(value = "新增或修改")
+    public Boolean submit(@Valid @RequestBody $!{entity} $!{table.entityPath}) {
         return $!{table.entityPath}Service.saveOrUpdate($!{table.entityPath});
-        }
+    }
 
-@PostMapping("/remove")
-@ApiOperation(value = "逻辑删除")
-public R remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+    @PostMapping("/remove")
+    @ApiOperation(value = "逻辑删除")
+    public R remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
         return $!{table.entityPath}Service.removeById(id);
-        }
-
+    }
 }

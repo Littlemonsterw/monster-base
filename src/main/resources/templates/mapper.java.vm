@@ -15,14 +15,14 @@ import $!{voPackage}.$!{entity}VO;
  */
 public interface $!{table.mapperName} extends $!{superMapperClass}<$!{entity}> {
 
-        /**
-         * 分页查询
-         *
-         * @param page 分页
-         * @param $!{table.entityPath} 查询条件
-         * @return List<$!{entity}VO>
-         */
-        List<$!{entity}VO> get$!{entity}Page(IPage page, @Param("pm") $!{entity}VO $!{table.entityPath});
+    /**
+    * 分页查询
+    *
+    * @param page 分页
+    * @param $!{table.entityPath} 查询条件
+    * @return List<$!{entity}VO>
+    */
+    List<$!{entity}VO> get$!{entity}Page(IPage<$!{entity}VO> page, @Param("pm") $!{entity}VO $!{table.entityPath});
 
 }
 
