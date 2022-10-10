@@ -17,13 +17,14 @@ public class CodeServiceImpl extends ServiceImpl<CodeMapper, Code> implements IC
     @Override
     public void codeGenerator() {
         CodeGenerator codeGenerator = new CodeGenerator();
-        codeGenerator.setUrl("jdbc:mysql://localhost:3306/mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai");
-        codeGenerator.setUsername("root");
-        codeGenerator.setPassword("root");
-        codeGenerator.setSchemaName("system_user");
-        codeGenerator.setParentPackage("base");
+        codeGenerator.setUrl("jdbc:mysql://10.10.1.42:3306/sc_community?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai");
+        codeGenerator.setUsername("sc");
+        codeGenerator.setPassword("Leyun@sc");
+        codeGenerator.setSchemaName("c_owner_house");
+        codeGenerator.setParentPackage("com.monster.base.develop");
         codeGenerator.setPackageDir("E:\\code");
-        codeGenerator.setTablePrefix("t_");
+        codeGenerator.setTablePrefix("c_");
+        codeGenerator.setHasSuperEntity(true);
         codeGenerator.run();
     }
 }

@@ -1,13 +1,13 @@
 package com.monster.base.develop.utils;
 
 import cn.hutool.core.date.DatePattern;
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.fill.Column;
 import com.monster.base.develop.entity.BaseEntity;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -37,6 +38,7 @@ public class CodeGenerator {
     private String[] superEntityColumns;
     private String packageDir;
     private String packageWebDir;
+    private boolean hasSuperEntity;
 
     public void run() {
         Properties prop = this.getProperties();
@@ -76,10 +78,23 @@ public class CodeGenerator {
                 .build();
 
         // 注入配置
+        List<CustomFile> customFiles = new ArrayList<>();
+        customFiles.add(new CustomFile.Builder()
+                .enableFileOverride()
+                .fileName("VO.java")
+                .templatePath("/templates/entityVO.java.vm")
+                .filePath(this.getOutputDir() + "/" + parentPackage.replace(StringPool.DOT, StringPool.SLASH) + "/vo")
+                .build());
+
+        customFiles.add(new CustomFile.Builder()
+                .enableFileOverride()
+                .fileName("DTO.java")
+                .templatePath("/templates/entityDTO.java.vm")
+                .filePath(this.getOutputDir() + "/" + parentPackage.replace(StringPool.DOT, StringPool.SLASH) + "/dto")
+                .build());
+
         InjectionConfig injectionConfig = new InjectionConfig.Builder()
-                .beforeOutputFile((tableInfo, objectMap) -> log.info("tableInfo: " + tableInfo.getEntityName() + " objectMap: " + objectMap.size()))
-                .customMap(Collections.singletonMap("test", "monster"))
-                .customFile(Collections.singletonMap("test.txt", "/templates/test.vm"))
+                .customFile(customFiles)
                 .build();
 
         // 策略配置
@@ -96,14 +111,19 @@ public class CodeGenerator {
         strategyConfig.entityBuilder()
                 .naming(NamingStrategy.underline_to_camel)
                 .idType(IdType.ASSIGN_ID)
-                .superClass(BaseEntity.class)
                 .enableLombok()
                 .enableTableFieldAnnotation()
                 .enableFileOverride()
-                .formatFileName("%sEntity")
-                .addTableFills(new Column("create_time", FieldFill.INSERT))
-                .addTableFills(new Column("update_time", FieldFill.INSERT_UPDATE))
+                .formatFileName("%s")
                 .build();
+
+        if (hasSuperEntity) {
+            strategyConfig.entityBuilder()
+                    .superClass(BaseEntity.class)
+                    .addIgnoreColumns("id", "create_user_id", "update_user_id", "create_time", "update_time", "is_deleted")
+                    .build();
+        }
+
         // 控制器属性配置
         strategyConfig.controllerBuilder()
                 .enableFileOverride()
@@ -137,7 +157,7 @@ public class CodeGenerator {
         AutoGenerator generator = new AutoGenerator(dsc);
         generator.global(globalConfig);
         generator.packageInfo(packageConfig);
-        //generator.injection(injectionConfig);
+        generator.injection(injectionConfig);
         generator.strategy(strategyConfig);
         generator.template(templateConfig);
         generator.execute();
@@ -156,11 +176,6 @@ public class CodeGenerator {
 
     private String getOutputDir() {
         String defaultPackageDir = System.getProperty("user.dir");
-        return (StringUtils.isBlank(this.packageDir) ? defaultPackageDir : this.packageDir) + "\\src\\main\\java";
-    }
-
-    private String getOutputWebDir() {
-        String defaultPackageWebDir = System.getProperty("user.dir");
-        return (StringUtils.isBlank(this.packageDir) ? defaultPackageWebDir : this.packageDir) + "/src/web";
+        return StringUtils.isBlank(this.packageDir) ? defaultPackageDir : this.packageDir;
     }
 }

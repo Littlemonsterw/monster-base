@@ -5,11 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import javax.validation.Valid;
 
-import $!{package.Entity}.$!{entity};
-import $!{package.Service}.$!{table.serviceName};
 
 /**
  *
@@ -32,9 +31,14 @@ public class $!{table.controllerName} {
 
     @GetMapping("/detail")
     @ApiOperation(value = "详情")
-    public $!{entity} detail((@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
-        $!{entity} detail = $!{table.entityPath}Service.getById(id);
-        return detail;
+    public $!{entity} detail(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+        return $!{table.entityPath}Service.getById(id);
+    }
+
+    @GetMapping("/page")
+    @ApiOperation(value = "分页查询")
+    public IPage<$!{entity}VO> page(IPage<$!{entity}VO> page, $!{entity}VO $!{table.entityPath}) {
+        return $!{table.entityPath}Service.get$!{entity}Page(page, $!{table.entityPath});
     }
 
     @PostMapping("/submit")
@@ -45,7 +49,7 @@ public class $!{table.controllerName} {
 
     @PostMapping("/remove")
     @ApiOperation(value = "逻辑删除")
-    public R remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+    public Boolean remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
         return $!{table.entityPath}Service.removeById(id);
     }
 }
