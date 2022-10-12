@@ -120,7 +120,7 @@ public class CodeGenerator {
         if (hasSuperEntity) {
             strategyConfig.entityBuilder()
                     .superClass(BaseEntity.class)
-                    .addIgnoreColumns("id", "create_user_id", "update_user_id", "create_time", "update_time", "is_deleted")
+                    .addSuperEntityColumns("id", "create_user_id", "update_user_id", "create_time", "update_time", "is_deleted")
                     .build();
         }
 

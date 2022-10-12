@@ -1,5 +1,6 @@
 package com.monster.base.develop.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.monster.base.develop.entity.Code;
 
@@ -9,5 +10,19 @@ import com.monster.base.develop.entity.Code;
  */
 public interface ICodeService extends IService<Code> {
 
-    void codeGenerator();
+    /**
+     * 分页查询
+     *
+     * @param page 分页
+     * @param code 查询条件
+     * @return IPage<CodeVO>
+     */
+    IPage<Code> getCodePage(IPage<Code> page, Code code);
+
+    /**
+     * 代码生成
+     *
+     * @param id 代码生产表主键id
+     */
+    void codeGenerator(Long id);
 }

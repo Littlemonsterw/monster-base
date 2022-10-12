@@ -3,8 +3,22 @@
 <mapper namespace="com.monster.base.develop.mapper.DatasourceMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="codeResultMap" type="com.monster.base.develop.entity.Datasource">
-
+    <resultMap id="datasourceResultMap" type="com.monster.base.develop.entity.Datasource">
+         <result column="id" property="id"/>
+         <result column="create_user_id" property="createUserId"/>
+         <result column="create_time" property="createTime"/>
+         <result column="update_user_id" property="updateUserId"/>
+         <result column="update_time" property="updateTime"/>
+         <result column="is_deleted" property="isDeleted"/>
+         <result column="name" property="name"/>
+         <result column="url" property="url"/>
+         <result column="username" property="username"/>
+         <result column="password" property="password"/>
+         <result column="remark" property="remark"/>
     </resultMap>
+
+    <select id="getDatasourcePage" resultMap="datasourceResultMap">
+        select * from mpg_datasource where is_deleted = 0
+    </select>
 
 </mapper>
