@@ -26,13 +26,13 @@ public class BaseEntity implements Serializable {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long createUserId;
 
-    @ApiModelProperty(value = "更新人id")
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long updateUserId;
-
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private Date createTime;
+
+    @ApiModelProperty(value = "更新人id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long updateUserId;
 
     @ApiModelProperty(value = "更新时间")
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)

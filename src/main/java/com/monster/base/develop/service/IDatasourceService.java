@@ -1,7 +1,6 @@
 package com.monster.base.develop.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.monster.base.develop.entity.Datasource;
 
 
@@ -11,7 +10,7 @@ import com.monster.base.develop.entity.Datasource;
  * @author Monster-w
  * @date 2022-10-12 11:17:04
  */
-public interface IDatasourceService extends IService<Datasource> {
+public interface IDatasourceService extends BaseService<Datasource> {
 
     /**
      * 分页查询
