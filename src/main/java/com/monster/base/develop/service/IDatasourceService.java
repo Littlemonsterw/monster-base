@@ -1,6 +1,8 @@
 package com.monster.base.develop.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.dto.DatasourceDTO;
 import com.monster.base.develop.entity.Datasource;
 
 
@@ -19,6 +21,6 @@ public interface IDatasourceService extends BaseService<Datasource> {
      * @param datasource 查询条件
      * @return IPage<DatasourceVO>
      */
-    IPage<Datasource> getDatasourcePage(IPage<Datasource> page, Datasource datasource);
+    IPage<Datasource> getDatasourcePage(Page<Datasource> page, DatasourceDTO datasource);
 
 }

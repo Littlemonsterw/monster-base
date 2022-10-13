@@ -22,6 +22,6 @@ public interface $!{table.serviceName} extends $!{superServiceClass}<$!{entity}>
      * @param $!{table.entityPath} 查询条件
      * @return IPage<$!{entity}VO>
      */
-    IPage<$!{entity}VO> get$!{entity}Page(IPage<$!{entity}VO> page, $!{entity}VO $!{table.entityPath});
+    IPage<$!{entity}VO> get$!{entity}Page(IPage<$!{entity}VO> page, $!{entity}DTO $!{table.entityPath});
 
 }

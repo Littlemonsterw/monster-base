@@ -1,6 +1,8 @@
 package com.monster.base.develop.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.dto.CodeDTO;
 import com.monster.base.develop.entity.Code;
 import com.monster.base.develop.entity.Datasource;
 import com.monster.base.develop.mapper.CodeMapper;
@@ -8,6 +10,7 @@ import com.monster.base.develop.service.ICodeService;
 import com.monster.base.develop.service.IDatasourceService;
 import com.monster.base.develop.utils.CodeGenerator;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 
@@ -22,14 +25,16 @@ public class CodeServiceImpl extends BaseServiceImpl<CodeMapper, Code> implement
     private IDatasourceService datasourceService;
 
     @Override
-    public IPage<Code> getCodePage(IPage<Code> page, Code code) {
+    public IPage<Code> getCodePage(Page<Code> page, CodeDTO code) {
         return page.setRecords(baseMapper.getCodePage(page, code));
     }
 
     @Override
     public void codeGenerator(Long id) {
         Code code = getById(id);
+        Assert.notNull(code, "未查询到代码生成配置");
         Datasource datasource = datasourceService.getById(code.getDatasourceId());
+        Assert.notNull(datasource, "未查询到数据源配置");
 
         CodeGenerator codeGenerator = new CodeGenerator();
         codeGenerator.setUrl(datasource.getUrl());

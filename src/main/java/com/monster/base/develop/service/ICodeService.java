@@ -1,6 +1,8 @@
 package com.monster.base.develop.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.dto.CodeDTO;
 import com.monster.base.develop.entity.Code;
 
 /**
@@ -16,7 +18,7 @@ public interface ICodeService extends BaseService<Code> {
      * @param code 查询条件
      * @return IPage<CodeVO>
      */
-    IPage<Code> getCodePage(IPage<Code> page, Code code);
+    IPage<Code> getCodePage(Page<Code> page, CodeDTO code);
 
     /**
      * 代码生成

@@ -1,6 +1,8 @@
 package com.monster.base.develop.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.dto.DatasourceDTO;
 import com.monster.base.develop.entity.Datasource;
 import com.monster.base.develop.service.IDatasourceService;
 import io.swagger.annotations.Api;
@@ -35,7 +37,7 @@ public class DatasourceController {
 
     @GetMapping("/page")
     @ApiOperation(value = "分页查询")
-    public IPage<Datasource> page(IPage<Datasource> page, Datasource datasource) {
+    public IPage<Datasource> page(Page<Datasource> page, DatasourceDTO datasource) {
         return datasourceService.getDatasourcePage(page, datasource);
     }
 

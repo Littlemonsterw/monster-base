@@ -37,7 +37,7 @@ public class $!{table.controllerName} {
 
     @GetMapping("/page")
     @ApiOperation(value = "分页查询")
-    public IPage<$!{entity}VO> page(IPage<$!{entity}VO> page, $!{entity}VO $!{table.entityPath}) {
+    public IPage<$!{entity}VO> page(IPage<$!{entity}VO> page, $!{entity}DTO $!{table.entityPath}) {
         return $!{table.entityPath}Service.get$!{entity}Page(page, $!{table.entityPath});
     }
 

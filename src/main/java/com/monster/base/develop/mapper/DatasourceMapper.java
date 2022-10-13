@@ -1,7 +1,8 @@
 package com.monster.base.develop.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.dto.DatasourceDTO;
 import com.monster.base.develop.entity.Datasource;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,7 +24,7 @@ public interface DatasourceMapper extends BaseMapper<Datasource> {
     * @param datasource 查询条件
     * @return List<DatasourceVO>
     */
-    List<Datasource> getDatasourcePage(IPage<Datasource> page, @Param("pm") Datasource datasource);
+    List<Datasource> getDatasourcePage(Page<Datasource> page, @Param("pm") DatasourceDTO datasource);
 
 }
 

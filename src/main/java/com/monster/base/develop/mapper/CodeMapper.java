@@ -1,7 +1,8 @@
 package com.monster.base.develop.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.dto.CodeDTO;
 import com.monster.base.develop.entity.Code;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,7 +24,7 @@ public interface CodeMapper extends BaseMapper<Code> {
     * @param code 查询条件
     * @return List<CodeVO>
     */
-    List<Code> getCodePage(IPage<Code> page, @Param("pm") Code code);
+    List<Code> getCodePage(Page<Code> page, @Param("pm") CodeDTO code);
 
 }
 

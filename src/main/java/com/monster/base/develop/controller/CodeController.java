@@ -1,6 +1,8 @@
 package com.monster.base.develop.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.dto.CodeDTO;
 import com.monster.base.develop.entity.Code;
 import com.monster.base.develop.service.ICodeService;
 import io.swagger.annotations.Api;
@@ -32,7 +34,7 @@ public class CodeController {
 
     @GetMapping("/page")
     @ApiOperation(value = "分页查询")
-    public IPage<Code> page(IPage<Code> page, Code code) {
+    public IPage<Code> page(Page<Code> page, CodeDTO code) {
         return codeService.getCodePage(page, code);
     }
 
