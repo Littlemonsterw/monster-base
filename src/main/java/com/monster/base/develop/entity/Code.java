@@ -1,6 +1,7 @@
 package com.monster.base.develop.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -19,6 +20,7 @@ import javax.validation.constraints.NotNull;
 @TableName("mpg_code")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "Code对象", description = "代码生成表")
+@JsonIgnoreProperties({"createUserId", "createTime", "updateUserId", "updateTime", "isDeleted"})
 public class Code extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

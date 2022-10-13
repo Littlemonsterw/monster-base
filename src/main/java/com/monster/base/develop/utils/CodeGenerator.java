@@ -65,8 +65,20 @@ public class CodeGenerator {
                 .commentDate(DatePattern.NORM_DATETIME_PATTERN)
                 .build();
 
-        // 包配置
-        PackageConfig packageConfig = new PackageConfig.Builder()
+        AutoGenerator generator = new AutoGenerator(dsc);
+        generator.global(globalConfig);
+        generator.packageInfo(this.packageConfig());
+        generator.injection(this.injectionConfig());
+        generator.strategy(this.strategyConfig());
+        generator.template(this.templateConfig());
+        generator.execute();
+    }
+
+    /**
+     * 包配置
+     */
+    private PackageConfig packageConfig() {
+        return new PackageConfig.Builder()
                 .parent(parentPackage)
                 .moduleName(moduleName)
                 .entity("entity")
@@ -76,8 +88,78 @@ public class CodeGenerator {
                 .xml("mapper")
                 .controller("controller")
                 .build();
+    }
 
-        // 注入配置
+    /**
+     * 策略配置
+     */
+    private StrategyConfig strategyConfig() {
+        StrategyConfig strategy = new StrategyConfig.Builder()
+                .enableSchema()
+                .enableCapitalMode()
+                .enableSkipView()
+                .disableSqlFilter()
+                .addInclude(schemaName)
+                .addTablePrefix(tablePrefix)
+                .build();
+
+        // 实体属性配置
+        strategy.entityBuilder()
+                .naming(NamingStrategy.underline_to_camel)
+                .idType(IdType.ASSIGN_ID)
+                .enableLombok()
+                .enableTableFieldAnnotation()
+                .enableFileOverride()
+                .formatFileName("%s")
+                .build();
+
+        if (hasSuperEntity) {
+            strategy.entityBuilder()
+                    .superClass(BaseEntity.class)
+                    .addSuperEntityColumns("id", "create_user_id", "update_user_id", "create_time", "update_time", "is_deleted")
+                    .build();
+        }
+
+        // 控制器属性配置
+        strategy.controllerBuilder()
+                .enableFileOverride()
+                .enableHyphenStyle()
+                .enableRestStyle()
+                .formatFileName("%sController")
+                .build();
+
+        // Service属性配置
+        strategy.serviceBuilder()
+                .enableFileOverride()
+                .formatServiceFileName("I%sService")
+                .formatServiceImplFileName("%sServiceImpl")
+                .build();
+
+        // Mapper属性配置
+        strategy.mapperBuilder()
+                .enableBaseResultMap()
+                .enableFileOverride()
+                .formatMapperFileName("%sMapper")
+                .formatXmlFileName("%sMapper")
+                .build();
+        return strategy;
+    }
+
+    private TemplateConfig templateConfig() {
+        return new TemplateConfig.Builder()
+                .entity("/templates/entity.java")
+                .service("/templates/service.java")
+                .serviceImpl("/templates/serviceImpl.java")
+                .mapper("/templates/mapper.java")
+                .xml("/templates/mapper.xml")
+                .controller("/templates/controller.java")
+                .build();
+    }
+
+    /**
+     * 注入配置
+     */
+    private InjectionConfig injectionConfig() {
         List<CustomFile> customFiles = new ArrayList<>();
         customFiles.add(new CustomFile.Builder()
                 .enableFileOverride()
@@ -92,75 +174,9 @@ public class CodeGenerator {
                 .templatePath("/templates/entityDTO.java.vm")
                 .filePath(this.getOutputDir() + "/" + parentPackage.replace(StringPool.DOT, StringPool.SLASH) + "/dto")
                 .build());
-
-        InjectionConfig injectionConfig = new InjectionConfig.Builder()
+        return new InjectionConfig.Builder()
                 .customFile(customFiles)
                 .build();
-
-        // 策略配置
-        StrategyConfig strategyConfig = new StrategyConfig.Builder()
-                .enableSchema()
-                .enableCapitalMode()
-                .enableSkipView()
-                .disableSqlFilter()
-                .addInclude(schemaName)
-                .addTablePrefix(tablePrefix)
-                .build();
-
-        // 实体属性配置
-        strategyConfig.entityBuilder()
-                .naming(NamingStrategy.underline_to_camel)
-                .idType(IdType.ASSIGN_ID)
-                .enableLombok()
-                .enableTableFieldAnnotation()
-                .enableFileOverride()
-                .formatFileName("%s")
-                .build();
-
-        if (hasSuperEntity) {
-            strategyConfig.entityBuilder()
-                    .superClass(BaseEntity.class)
-                    .addSuperEntityColumns("id", "create_user_id", "update_user_id", "create_time", "update_time", "is_deleted")
-                    .build();
-        }
-
-        // 控制器属性配置
-        strategyConfig.controllerBuilder()
-                .enableFileOverride()
-                .enableHyphenStyle()
-                .enableRestStyle()
-                .formatFileName("%sController")
-                .build();
-        // Service属性配置
-        strategyConfig.serviceBuilder()
-                .enableFileOverride()
-                .formatServiceFileName("I%sService")
-                .formatServiceImplFileName("%sServiceImpl")
-                .build();
-        // Mapper属性配置
-        strategyConfig.mapperBuilder()
-                .enableBaseResultMap()
-                .enableFileOverride()
-                .formatMapperFileName("%sMapper")
-                .formatXmlFileName("%sMapper")
-                .build();
-
-        TemplateConfig templateConfig = new TemplateConfig.Builder()
-                .entity("/templates/entity.java")
-                .service("/templates/service.java")
-                .serviceImpl("/templates/serviceImpl.java")
-                .mapper("/templates/mapper.java")
-                .xml("/templates/mapper.xml")
-                .controller("/templates/controller.java")
-                .build();
-
-        AutoGenerator generator = new AutoGenerator(dsc);
-        generator.global(globalConfig);
-        generator.packageInfo(packageConfig);
-        generator.injection(injectionConfig);
-        generator.strategy(strategyConfig);
-        generator.template(templateConfig);
-        generator.execute();
     }
 
     private Properties getProperties() {

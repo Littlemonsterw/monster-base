@@ -1,6 +1,7 @@
 package com.monster.base.develop.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,6 +17,7 @@ import lombok.EqualsAndHashCode;
 @TableName("mpg_datasource")
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "Datasource对象", description = "数据源配置表")
+@JsonIgnoreProperties({"createUserId", "createTime", "updateUserId", "updateTime", "isDeleted"})
 public class Datasource extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +33,4 @@ public class Datasource extends BaseEntity {
 
     @ApiModelProperty(value = "密码")
     private String password;
-
-    @ApiModelProperty(value = "备注")
-    private String remark;
 }
