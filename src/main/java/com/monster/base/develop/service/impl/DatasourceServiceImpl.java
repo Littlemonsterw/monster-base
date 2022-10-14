@@ -1,7 +1,6 @@
 package com.monster.base.develop.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.monster.base.develop.dto.DatasourceDTO;
 import com.monster.base.develop.entity.Datasource;
 import com.monster.base.develop.mapper.DatasourceMapper;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class DatasourceServiceImpl extends BaseServiceImpl<DatasourceMapper, Datasource> implements IDatasourceService {
 
     @Override
-    public IPage<Datasource> getDatasourcePage(Page<Datasource> page, DatasourceDTO datasource) {
+    public IPage<Datasource> getDatasourcePage(IPage<Datasource> page, DatasourceDTO datasource) {
         return page.setRecords(baseMapper.getDatasourcePage(page, datasource));
     }
 

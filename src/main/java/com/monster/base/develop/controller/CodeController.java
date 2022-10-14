@@ -1,9 +1,12 @@
 package com.monster.base.develop.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.common.Condition;
+import com.monster.base.develop.common.R;
+import com.monster.base.develop.common.ResultCode;
 import com.monster.base.develop.dto.CodeDTO;
 import com.monster.base.develop.entity.Code;
+import com.monster.base.develop.entity.Query;
 import com.monster.base.develop.service.ICodeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,32 +31,36 @@ public class CodeController {
 
     @GetMapping("/detail")
     @ApiOperation(value = "详情")
-    public Code detail(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
-        return codeService.getById(id);
+    public R<Code> detail(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+        return R.data(codeService.getById(id));
     }
 
     @GetMapping("/page")
     @ApiOperation(value = "分页查询")
-    public IPage<Code> page(Page<Code> page, CodeDTO code) {
-        return codeService.getCodePage(page, code);
+    public R<IPage<Code>> page(CodeDTO code, Query query) {
+        return R.data(codeService.getCodePage(Condition.getPage(query), code));
     }
 
     @PostMapping("/submit")
     @ApiOperation(value = "新增或修改")
-    public Boolean submit(@Valid @RequestBody Code code) {
-        return codeService.saveOrUpdate(code);
+    public R<Boolean> submit(@Valid @RequestBody Code code) {
+        return R.data(codeService.saveOrUpdate(code));
     }
 
     @PostMapping("/remove")
     @ApiOperation(value = "逻辑删除")
-    public Boolean remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
-        return codeService.removeById(id);
+    public R<Boolean> remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+        return R.data(codeService.removeById(id));
     }
 
     @GetMapping("/generator")
     @ApiOperation(value = "代码生成")
-    public Boolean codeGenerator(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
-        codeService.codeGenerator(id);
-        return true;
+    public R<Boolean> codeGenerator(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+        try {
+            codeService.codeGenerator(id);
+        } catch (Exception e) {
+            return R.fail(ResultCode.FAILURE.getCode(), e.getMessage());
+        }
+        return R.data(true);
     }
 }

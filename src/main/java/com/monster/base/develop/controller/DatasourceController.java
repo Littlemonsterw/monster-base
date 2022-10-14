@@ -1,9 +1,11 @@
 package com.monster.base.develop.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.monster.base.develop.common.Condition;
+import com.monster.base.develop.common.R;
 import com.monster.base.develop.dto.DatasourceDTO;
 import com.monster.base.develop.entity.Datasource;
+import com.monster.base.develop.entity.Query;
 import com.monster.base.develop.service.IDatasourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,25 +33,25 @@ public class DatasourceController {
 
     @GetMapping("/detail")
     @ApiOperation(value = "详情")
-    public Datasource detail(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
-        return datasourceService.getById(id);
+    public R<Datasource> detail(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+        return R.data(datasourceService.getById(id));
     }
 
     @GetMapping("/page")
     @ApiOperation(value = "分页查询")
-    public IPage<Datasource> page(Page<Datasource> page, DatasourceDTO datasource) {
-        return datasourceService.getDatasourcePage(page, datasource);
+    public R<IPage<Datasource>> page(DatasourceDTO datasource, Query query) {
+        return R.data(datasourceService.getDatasourcePage(Condition.getPage(query), datasource));
     }
 
     @PostMapping("/submit")
     @ApiOperation(value = "新增或修改")
-    public Boolean submit(@Valid @RequestBody Datasource datasource) {
-        return datasourceService.saveOrUpdate(datasource);
+    public R<Boolean> submit(@Valid @RequestBody Datasource datasource) {
+        return R.data(datasourceService.saveOrUpdate(datasource));
     }
 
     @PostMapping("/remove")
     @ApiOperation(value = "逻辑删除")
-    public Boolean remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
-        return datasourceService.removeById(id);
+    public R<Boolean> remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+        return R.data(datasourceService.removeById(id));
     }
 }

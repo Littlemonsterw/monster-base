@@ -1,5 +1,6 @@
 package com.monster.base.develop.common;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.monster.base.develop.constant.DefaultConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -33,11 +34,26 @@ public class R<T> {
     @ApiModelProperty(value = "返回消息", required = true)
     private String message;
 
+    private R(int code, String msg) {
+        this(code, null, msg);
+    }
+
+    @SuppressWarnings("unchecked")
     private R(int code, T data, String msg) {
         this.code = code;
-        this.data = data;
         this.message = msg;
         this.success = ResultCode.SUCCESS.code == code;
+        if (data instanceof Page<?>) {
+            ResultData resultData = new ResultData();
+            resultData.setCurrent((int) ((Page<?>) data).getCurrent());
+            resultData.setSize((int) ((Page<?>) data).getSize());
+            resultData.setTotal((int) ((Page<?>) data).getTotal());
+            resultData.setPages((int) ((Page<?>) data).getPages());
+            resultData.setRecords(((Page<?>) data).getRecords());
+            this.data = (T) resultData;
+        } else {
+            this.data = data;
+        }
     }
 
     /**
@@ -74,6 +90,18 @@ public class R<T> {
      */
     public static <T> R<T> data(int code, T data, String msg) {
         return new R<>(code, data, data == null ? DefaultConstant.DEFAULT_NULL_MESSAGE.getDesc() : msg);
+    }
+
+    /**
+     * 返回R
+     *
+     * @param code 业务代码
+     * @param msg        消息
+     * @param <T>        T 泛型标记
+     * @return R
+     */
+    public static <T> R<T> fail(int code, String msg) {
+        return new R<>(code, msg);
     }
 
 }

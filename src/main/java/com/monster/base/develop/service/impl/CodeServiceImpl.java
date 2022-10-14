@@ -1,7 +1,6 @@
 package com.monster.base.develop.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.monster.base.develop.dto.CodeDTO;
 import com.monster.base.develop.entity.Code;
 import com.monster.base.develop.entity.Datasource;
@@ -25,7 +24,7 @@ public class CodeServiceImpl extends BaseServiceImpl<CodeMapper, Code> implement
     private IDatasourceService datasourceService;
 
     @Override
-    public IPage<Code> getCodePage(Page<Code> page, CodeDTO code) {
+    public IPage<Code> getCodePage(IPage<Code> page, CodeDTO code) {
         return page.setRecords(baseMapper.getCodePage(page, code));
     }
 
