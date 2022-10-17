@@ -1,11 +1,11 @@
 package com.monster.base.develop.utils;
 
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit;
  * @date 2022/10/17 9:52
  */
 @Slf4j
+@AllArgsConstructor
 @ApiModel(description = "redis缓存工具类")
 public class RedisUtil {
 
-    @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
     /**
