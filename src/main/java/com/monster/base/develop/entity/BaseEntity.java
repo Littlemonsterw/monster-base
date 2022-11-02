@@ -22,6 +22,10 @@ public class BaseEntity implements Serializable {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
+    @ApiModelProperty(value = "创建组织id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long createDeptId;
+
     @ApiModelProperty(value = "创建人id")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long createUserId;

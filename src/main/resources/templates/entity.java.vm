@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value = "${entity}对象", description = "$!{table.comment}")
 #if(${superEntityClass})
-@JsonIgnoreProperties({"createUserId", "createTime", "updateUserId", "updateTime", "isDeleted"})
+@JsonIgnoreProperties({"createDeptId", "createUserId", "createTime", "updateUserId", "updateTime", "isDeleted"})
 public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
 #else
 public class ${entity} implements Serializable{
