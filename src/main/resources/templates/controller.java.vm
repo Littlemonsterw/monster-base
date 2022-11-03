@@ -52,7 +52,7 @@ public class $!{table.controllerName} {
 
     @PostMapping("/remove")
     @ApiOperation(value = "逻辑删除")
-    public R<Boolean> remove(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
-        return R.data($!{table.entityPath}Service.removeById(id));
+    public R<Boolean> remove(@ApiParam(value = "主键ids", required = true) @RequestParam String ids) {
+        return R.data($!{table.entityPath}Service.removeByIds(Func.toLongList(ids)));
     }
 }

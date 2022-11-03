@@ -8,6 +8,7 @@ import com.monster.base.develop.dto.CodeDTO;
 import com.monster.base.develop.entity.Code;
 import com.monster.base.develop.entity.Query;
 import com.monster.base.develop.service.ICodeService;
+import com.monster.base.develop.utils.Func;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -55,9 +56,9 @@ public class CodeController {
 
     @GetMapping("/generator")
     @ApiOperation(value = "代码生成")
-    public R<Boolean> codeGenerator(@ApiParam(value = "主键id", required = true) @RequestParam Long id) {
+    public R<Boolean> codeGenerator(@ApiParam(value = "代码主键id集合", required = true) @RequestParam String codeIds) {
         try {
-            codeService.codeGenerator(id);
+            Func.toLongList(codeIds).forEach(codeId -> codeService.codeGenerator(codeId));
         } catch (Exception e) {
             return R.fail(ResultCode.FAILURE.getCode(), e.getMessage());
         }

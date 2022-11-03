@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.monster.base.develop.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="userResultMap" type="com.monster.base.develop.entity.User">
+        <result column="id" property="id"/>
+        <result column="create_dept_id" property="createDeptId"/>
+        <result column="create_user_id" property="createUserId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user_id" property="updateUserId"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="code" property="code"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="icon" property="icon"/>
+        <result column="real_name" property="realName"/>
+        <result column="identity_card_no" property="identityCardNo"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
+        <result column="birthday" property="birthday"/>
+        <result column="sex" property="sex"/>
+        <result column="status" property="status"/>
+        <result column="account_type" property="accountType"/>
+        <result column="invalid_time" property="invalidTime"/>
+    </resultMap>
+
+    <select id="getUserPage" resultMap="userResultMap">
+        select *
+        from sys_user
+        where is_deleted = 0
+    </select>
+
+</mapper>

@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.monster.base.develop.entity.BaseEntity;
+import com.monster.base.develop.service.BaseService;
+import com.monster.base.develop.service.impl.BaseServiceImpl;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -113,13 +115,6 @@ public class CodeGenerator {
                 .formatFileName("%s")
                 .build();
 
-        if (hasSuperEntity) {
-            strategy.entityBuilder()
-                    .superClass(BaseEntity.class)
-                    .addSuperEntityColumns("id", "create_user_id", "update_user_id", "create_time", "update_time", "is_deleted")
-                    .build();
-        }
-
         // 控制器属性配置
         strategy.controllerBuilder()
                 .enableFileOverride()
@@ -142,6 +137,18 @@ public class CodeGenerator {
                 .formatMapperFileName("%sMapper")
                 .formatXmlFileName("%sMapper")
                 .build();
+
+        if (hasSuperEntity) {
+            strategy.entityBuilder()
+                    .superClass(BaseEntity.class)
+                    .addSuperEntityColumns("id", "create_user_id", "update_user_id", "create_time", "update_time", "is_deleted", "create_dept_id")
+                    .build();
+
+            strategy.serviceBuilder()
+                    .superServiceClass(BaseService.class)
+                    .superServiceImplClass(BaseServiceImpl.class)
+                    .build();
+        }
         return strategy;
     }
 
